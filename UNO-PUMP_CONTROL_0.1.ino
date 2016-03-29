@@ -80,14 +80,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println("Payload: " + msgString);
     
     if(msgString == "on"){
-      Serial.println("PoolPump on");
+      Serial.println("Pump on");
       //int pSpeed =  EEPROM.read(30);
       //RS485Serial.write (att , HEX);
       digitalWrite(2, HIGH);
       digitalWrite(4, HIGH);  
     }
     if(msgString == "off"){
-      Serial.println("PoolPump off");
+      Serial.println("Pump off");
       digitalWrite(2, LOW);      
       digitalWrite(4, LOW);
       digitalWrite(5, LOW);
@@ -99,7 +99,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
     
      if(msgString == "0") {
-      Serial.println("PoolPump off");
+      Serial.println("Pump off");
       digitalWrite(2, LOW);      
       digitalWrite(4, LOW);
       digitalWrite(5, LOW);
@@ -155,12 +155,12 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect("iPoolClient")) {
+    if (client.connect("ArduinoClient")) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish("PoolPump","hello world");
+      client.publish("Pump","hello world");
       // ... and resubscribe
-      client.subscribe("PoolPump");
+      client.subscribe("Pump");
       client.subscribe("Pumpspeed");
     } else {
       Serial.print("failed, rc=");
@@ -182,7 +182,7 @@ void setup()
   Ethernet.begin(mac, ip);
   // Allow the hardware to sort itself out
   delay(1500);
-  Serial.println("Pentair VS PUMP RS485 Remote"); 
+  Serial.println("VS PUMP RS485 Remote"); 
   pinMode(2,OUTPUT);
   digitalWrite(2,LOW);
   pinMode(4,OUTPUT);   // Speed 1
