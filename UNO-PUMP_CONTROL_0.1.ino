@@ -80,7 +80,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println("Payload: " + msgString);
     
     if(msgString == "on"){
-      Serial.println("PoolPump on");
+      Serial.println("Pump on");
       //int pSpeed =  EEPROM.read(30);
       //RS485Serial.write (att , HEX);
       digitalWrite(2, HIGH);
@@ -99,7 +99,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
     
      if(msgString == "0") {
-      Serial.println("PoolPump off");
+      Serial.println("Pump off");
       digitalWrite(2, LOW);      
       digitalWrite(4, LOW);
       digitalWrite(5, LOW);
@@ -110,28 +110,28 @@ void callback(char* topic, byte* payload, unsigned int length) {
         RS485Serial.write ( Stop, HEX); 
      }
     if((msgString >= "1") && (msgString <= "25")){
-      Serial.println("PumpSpeed 25%");
+      Serial.println("Speed 25%");
       RS485Serial.write ( sp1, HEX);
       digitalWrite(2, HIGH);
        EEPROM.write(30, 1);
        digitalWrite(4, HIGH);
     }
     if((msgString >= "26") && (msgString <= "50")){
-      Serial.println("PumpSpeed 50%");
+      Serial.println("Speed 50%");
        RS485Serial.write ( sp2, HEX);
       digitalWrite(2, HIGH);
        EEPROM.write(30, 2);
        digitalWrite(5, HIGH);
     }  
      if((msgString >= "51") && (msgString <= "75")){
-      Serial.println("PumpSpeed 75%");
+      Serial.println("Speed 75%");
       RS485Serial.write ( sp3, HEX);
       digitalWrite(2, HIGH);
        EEPROM.write(30, 3);
        digitalWrite(6, HIGH);
      }
      if((msgString >= "76") && (msgString <= "99")){
-      Serial.println("PumpSpeed 100%");
+      Serial.println("Speed 100%");
       RS485Serial.write ( sp4, HEX);
       digitalWrite(2, HIGH);
       digitalWrite(4, HIGH);
@@ -155,12 +155,12 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect("iPoolClient")) {
+    if (client.connect("Client")) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish("PoolPump","hello world");
+      client.publish("Pump","hello world");
       // ... and resubscribe
-      client.subscribe("PoolPump");
+      client.subscribe("Pump");
       client.subscribe("Pumpspeed");
     } else {
       Serial.print("failed, rc=");
@@ -182,7 +182,7 @@ void setup()
   Ethernet.begin(mac, ip);
   // Allow the hardware to sort itself out
   delay(1500);
-  Serial.println("Pentair VS PUMP RS485 Remote"); 
+  Serial.println(" RS485 Remote"); 
   pinMode(2,OUTPUT);
   digitalWrite(2,LOW);
   pinMode(4,OUTPUT);   // Speed 1
