@@ -87,7 +87,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
       digitalWrite(4, HIGH);  
     }
     if(msgString == "off"){
-      Serial.println("PoolPump off");
+      Serial.println("Pump off");
       digitalWrite(2, LOW);      
       digitalWrite(4, LOW);
       digitalWrite(5, LOW);
