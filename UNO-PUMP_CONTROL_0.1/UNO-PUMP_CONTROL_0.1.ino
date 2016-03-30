@@ -60,18 +60,20 @@ unsigned char PStat[]  = {
 int pSpeed =  EEPROM.read(30);
   
 
-void callback(char* topic, byte* payload, unsigned int length) {
+
+void callback(const MQTT::Publish& pub) {
+//void callback(char* topic, byte* payload, unsigned int length) {
   int i = 0;
 
-  Serial.println("Message arrived:  topic: " + String(topic));
-  Serial.println("Length: " + String(length,DEC));
+  Serial.println("Message arrived:  topic: " + String(pub.topic()));
+  Serial.println("Length: " + String(pub.payload_len(),DEC));
   
 
 //   int pSpeed =  EEPROM.read(30);
 //   pSpeed =constrain(pSpeed,1,4);
 
-    for(i=0; i<length; i++) {
-      message_buff[i] = payload[i];
+    for(i=0; i<pub.payload_len(); i++) {
+      message_buff[i] = pub.payload()[i];
     }
     message_buff[i] = '\0';
   
@@ -164,7 +166,7 @@ void reconnect() {
       client.subscribe("Pumpspeed");
     } else {
       Serial.print("failed, rc=");
-      Serial.print(client.state());
+//      Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       delay(5000);
@@ -176,8 +178,8 @@ void setup()
 {
   Serial.begin(9600);
 
-  client.setServer(server, 1883);
-  client.setCallback(callback);
+  client.set_server(server, 1883);
+  client.set_callback(callback);
 
   Ethernet.begin(mac, ip);
   // Allow the hardware to sort itself out
@@ -205,7 +207,7 @@ void loop()
     reconnect();
   }
   client.loop();
-  serialControl();
+//  serialControl(); // Not sure what this does, probably a part of SoftwareSerial?
   if  (digitalRead(4) == LOW && (millis() - lastConnectionTime > postingInterval))
   {
     
